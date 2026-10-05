@@ -3,6 +3,7 @@ from flask import Flask, g
 import psycopg
 from psycopg.rows import dict_row
 
+
 def get_db():
     if "db" not in g:
         url = os.environ.get("DATABASE_URL", "").strip()
@@ -11,10 +12,12 @@ def get_db():
         g.db = psycopg.connect(url, row_factory=dict_row)
     return g.db
 
+
 def close_db(exception=None):
     db = g.pop("db", None)
     if db is not None:
         db.close()
+
 
 def init_db():
     db = get_db()
@@ -22,8 +25,15 @@ def init_db():
         db.execute(f.read())
     db.commit()
 
+
 def create_app():
-    app = Flask(__name__)
+    app = Flask(
+        __name__,
+        template_folder=os.path.join(
+            os.path.dirname(os.path.dirname(__file__)),
+            "templates",
+        ),
+    )
     app.config.update(
         SECRET_KEY=os.environ.get("FLASK_SECRET_KEY", "meta-local"),
         META_GRAPH_API_VERSION=os.environ.get("META_GRAPH_API_VERSION", "v24.0"),
