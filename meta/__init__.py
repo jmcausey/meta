@@ -39,6 +39,10 @@ def create_app():
         META_GRAPH_API_VERSION=os.environ.get("META_GRAPH_API_VERSION", "v24.0"),
         META_PAGE_ID=os.environ.get("META_PAGE_ID", "").strip(),
         META_ACCESS_TOKEN=os.environ.get("META_ACCESS_TOKEN", "").strip(),
+        META_APP_ID=os.environ.get("META_APP_ID", "").strip(),
+        META_APP_SECRET=os.environ.get("META_APP_SECRET", "").strip(),
+        META_PUBLIC_URL=os.environ.get("META_PUBLIC_URL", "http://localhost:5004").rstrip("/"),
+        LOCALS_ONLY_PUBLIC_URL=os.environ.get("LOCALS_ONLY_PUBLIC_URL", "http://localhost:5000").rstrip("/"),
     )
     app.teardown_appcontext(close_db)
     from .routes import bp
