@@ -1,0 +1,33 @@
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-cl}:${POSTGRES_PASSWORD:-change-me}@postgres:5432/${POSTGRES_DB:-cl}
+      FLASK_SECRET_KEY: ${FLASK_SECRET_KEY:-change-this-secret}
+      META_GRAPH_API_VERSION: ${META_GRAPH_API_VERSION:-v24.0}
+      META_PAGE_ID: ${META_PAGE_ID:-}
+      META_ACCESS_TOKEN: ${META_ACCESS_TOKEN:-}
+    command: sh -c "python -c 'from meta import create_app; create_app()' && gunicorn --bind 0.0.0.0:5004 --workers 2 app:app"
+    ports:
+      - "${APP_PORT:-5004}:5004"
+    networks:
+      - cl_shared_data
+
+  scheduler:
+    build: .
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-cl}:${POSTGRES_PASSWORD:-change-me}@postgres:5432/${POSTGRES_DB:-cl}
+      META_GRAPH_API_VERSION: ${META_GRAPH_API_VERSION:-v24.0}
+      META_PAGE_ID: ${META_PAGE_ID:-}
+      META_ACCESS_TOKEN: ${META_ACCESS_TOKEN:-}
+      META_INTERVAL_SECONDS: ${META_INTERVAL_SECONDS:-900}
+    command: python scheduler.py
+    networks:
+      - cl_shared_data
+
+networks:
+  cl_shared_data:
+    external: true
+    name: cl_shared_data
