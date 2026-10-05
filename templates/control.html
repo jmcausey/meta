@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Meta Control Panel{% endblock %}
+{% block content %}
+<h1>Facebook Control Panel</h1>
+<table><tr><th>Graph API</th><td>{{ graph_version }}</td></tr>
+<tr><th>Page ID</th><td>{{ page_id or "Not configured" }}</td></tr>
+<tr><th>Access token</th><td>Configured through environment only</td></tr></table>
+<p>The scheduler fetches the Page feed automatically and stores posts in PostgreSQL.</p>
+{% endblock %}
