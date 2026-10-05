@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Facebook — Meta{% endblock %}
+{% block content %}
+<h1>{{ page.get("name", "Facebook Page") }}</h1>
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+{% if page.get("about") %}<p>{{ page.about }}</p>{% endif %}
+<p class="muted">Page ID: {{ page.get("id", "not configured") }}</p>
+<div class="grid">{% for post in posts %}<article>
+{% if post.get("full_picture") %}<img src="{{ post.full_picture }}" alt="Facebook post image">{% endif %}
+<p>{{ post.get("message", "Facebook post") }}</p><p class="muted">{{ post.get("created_time", "") }}</p>
+{% if post.get("permalink_url") %}<a href="{{ post.permalink_url }}" target="_blank" rel="noopener">View on Facebook</a>{% endif %}
+</article>{% else %}<article><p>No Facebook posts available.</p></article>{% endfor %}</div>
+{% endblock %}
